@@ -1,0 +1,64 @@
+class conf():
+    #mqtt server config - currently as simple as possible
+    mqtt_addr          = '127.0.0.1'
+    mqtt_port          = 1883
+    mqtt_alive         = 60
+    mqtt_status_topic  = "cc1101mqtt/status/"
+    mqtt_rssi_topic    = "cc1101mqtt/rssi/"
+    mqtt_command_topic = "cc1101mqtt/command/"
+
+
+    spibus  = 0 # spidev for RPi, bus num for esp32
+    spics   = 0 # and CS pin
+    speed   = 5000000
+    gdo0    = 24  # Pins using GPIO numbering for additional cc1101 signals
+    gdo2    = 25
+
+    # remotes/blinds config. 
+    # Sniff the traffic to determine the 3 byte addresses and channel no.s of the blinds
+    # the 3 byte address of each remote, you can have as many as you need
+    remote_addr = [ [0xAA, 0xAA, 0xAA], [0xAA, 0xAA, 0xAA]  ]
+    # for each remote above a list of 3 byte addresses and channel number for blinds
+    # there can be 1-255(?) entries per remote but all should have the same numbers of entries
+    # entries with 0x00s will be ignored
+    remote_blind_id = [         
+        #  <3 byte address>, <chl>  
+        [ [0xAA, 0xAA, 0xAA, 0x00],
+          [0xAA, 0xAA, 0xAA, 0x00],
+          [0xAA, 0xAA, 0xAA, 0x00],
+          [0xAA, 0xAA, 0xAA, 0x00],
+          [0xAA, 0xAA, 0xAA, 0x00],
+          [0xAA, 0xAA, 0xAA, 0x00],
+          [0xAA, 0xAA, 0xAA, 0x00],
+          [0xAA, 0xAA, 0xAA, 0x00],
+          [0xAA, 0xAA, 0xAA, 0x00],
+          [0xAA, 0xAA, 0xAA, 0x00],
+          [0xAA, 0xAA, 0xAA, 0x00],
+          [0xAA, 0xAA, 0xAA, 0x00],
+          [0xAA, 0xAA, 0xAA, 0x00],
+          [0x00, 0x00, 0x00, 0x00],
+          [0x00, 0x00, 0x00, 0x00],
+        ],
+        [ [0x00, 0x00, 0x00, 0x00],
+          [0x00, 0x00, 0x00, 0x00],
+          [0x00, 0x00, 0x00, 0x00],
+          [0x00, 0x00, 0x00, 0x00],
+          [0x00, 0x00, 0x00, 0x00],
+          [0x00, 0x00, 0x00, 0x00],
+          [0x00, 0x00, 0x00, 0x00],
+          [0x00, 0x00, 0x00, 0x00],
+          [0x00, 0x00, 0x00, 0x00],
+          [0x00, 0x00, 0x00, 0x00],
+          [0x00, 0x00, 0x00, 0x00],
+          [0x00, 0x00, 0x00, 0x00],
+          [0x00, 0x00, 0x00, 0x00],
+          [0x00, 0x00, 0x00, 0x00],
+          [0x00, 0x00, 0x00, 0x00],
+        ]
+    ]
+
+    retrans    = 3      # number of times to send each command >=1
+    checkFreq  = 300    # check blind state every n seconds
+    wdtTimeout = 400000 # esp32 only - in msec, the watchdog timeout > checkFreq time
+    sleepTime  = 0.01   # seconds to sleep if no message received, RPi only, so we don't hog a cpu
+    rawTrace   = False  # print all bytes sent/received in raw hex
